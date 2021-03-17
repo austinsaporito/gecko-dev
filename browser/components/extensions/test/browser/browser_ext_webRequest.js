@@ -5,9 +5,7 @@
 /* import-globals-from ../../../../../toolkit/components/extensions/test/mochitest/head_webrequest.js */
 loadTestSubscript("head_webrequest.js");
 
-const { HiddenFrame } = ChromeUtils.import(
-  "resource://gre/modules/HiddenFrame.jsm"
-);
+ChromeUtils.import("resource://gre/modules/HiddenFrame.jsm", this);
 const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
 SimpleTest.requestCompleteLog();

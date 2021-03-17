@@ -7,6 +7,12 @@
 
 "use strict";
 
+ChromeUtils.defineModuleGetter(
+  this,
+  "Services",
+  "resource://gre/modules/Services.jsm"
+);
+
 var { ExtensionError } = ExtensionUtils;
 
 this.search = class extends ExtensionAPI {

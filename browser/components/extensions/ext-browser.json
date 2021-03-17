@@ -1,4 +1,12 @@
 {
+  "password": {
+    "url": "chrome://browser/content/parent/password.js",	
+    "schema": "chrome://browser/content/schemas/password.json",
+    "scopes": ["addon_parent"],
+    "paths": [
+      ["password"]
+    ]
+  },
   "bookmarks": {
     "url": "chrome://browser/content/parent/ext-bookmarks.js",
     "schema": "chrome://browser/content/schemas/bookmarks.json",

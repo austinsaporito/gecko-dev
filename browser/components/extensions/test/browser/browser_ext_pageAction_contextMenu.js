@@ -44,6 +44,7 @@ let contextMenuItems = {
   "context-navigation": "hidden",
   "context-sep-navigation": "hidden",
   "context-viewsource": "",
+  "context-viewinfo": "disabled",
   "inspect-separator": "hidden",
   "context-inspect": "hidden",
   "context-inspect-a11y": "hidden",
@@ -111,9 +112,9 @@ add_task(async function pageaction_popup_image_contextmenu() {
     "#testimg"
   );
 
-  let item = contentAreaContextMenu.querySelector("#context-copyimage");
+  let item = contentAreaContextMenu.querySelector("#context-viewimageinfo");
   ok(!item.hidden);
-  ok(!item.disabled);
+  ok(item.disabled);
 
   await closeContextMenu(contentAreaContextMenu);
 

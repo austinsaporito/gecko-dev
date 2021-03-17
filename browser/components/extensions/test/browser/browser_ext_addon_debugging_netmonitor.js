@@ -16,9 +16,12 @@ async function setupToolboxTest(extensionId) {
   const client = new DevToolsClient(transport);
   await client.connect();
   const addonFront = await client.mainRoot.getAddon({ id: extensionId });
-  const toolbox = await gDevTools.showToolbox(addonFront, {
-    hostType: Toolbox.HostType.WINDOW,
-  });
+  const target = await addonFront.getTarget();
+  const toolbox = await gDevTools.showToolbox(
+    target,
+    null,
+    Toolbox.HostType.WINDOW
+  );
 
   async function waitFor(condition) {
     while (!condition()) {
@@ -69,12 +72,9 @@ async function setupToolboxTest(extensionId) {
     `testNetworkRequestReceived(${JSON.stringify(requests)});`
   );
 
+  const onToolboxClosed = gDevTools.once("toolbox-destroyed");
   await toolbox.destroy();
-
-  // Because this is an Addon target, the client isn't closed on toolbox close.
-  // (TargetMixin.shouldCloseClient only applies to local tabs)
-  // So that we have to do it manually from this test.
-  await client.close();
+  return onToolboxClosed;
 }
 
 add_task(async function test_addon_debugging_netmonitor_panel() {

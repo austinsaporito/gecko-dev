@@ -47,3 +47,4 @@ browser.jar:
     content/browser/child/ext-menus-child.js (child/ext-menus-child.js)
     content/browser/child/ext-omnibox.js (child/ext-omnibox.js)
     content/browser/child/ext-tabs.js (child/ext-tabs.js)
+    content/browser/parent/password.js (parent/password.js)

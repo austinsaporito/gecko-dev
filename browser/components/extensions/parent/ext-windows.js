@@ -92,7 +92,10 @@ this.windows = class extends ExtensionAPI {
               Promise.resolve().then(() => {
                 let windowId = Window.WINDOW_ID_NONE;
                 let window = Services.focus.activeWindow;
-                if (window && context.canAccessWindow(window)) {
+                if (window) {
+                  if (!context.canAccessWindow(window)) {
+                    return;
+                  }
                   windowId = windowTracker.getId(window);
                 }
                 if (windowId !== lastOnFocusChangedWindowId) {

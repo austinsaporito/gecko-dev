@@ -54,6 +54,7 @@ let contextMenuItems = {
   "context-navigation": "hidden",
   "context-sep-navigation": "hidden",
   "context-viewsource": "",
+  "context-viewinfo": "disabled",
   "inspect-separator": "hidden",
   "context-inspect": "hidden",
   "context-inspect-a11y": "hidden",
@@ -75,12 +76,6 @@ function assertTelemetryMatches(events) {
 add_task(async function test_setup() {
   // Clear any previosuly collected telemetry event.
   Services.telemetry.clearEvents();
-  if (CustomizableUI.protonToolbarEnabled) {
-    CustomizableUI.addWidgetToArea("home-button", "nav-bar");
-    registerCleanupFunction(() =>
-      CustomizableUI.removeWidgetFromArea("home-button")
-    );
-  }
 });
 
 add_task(async function browseraction_popup_contextmenu() {
@@ -141,9 +136,9 @@ add_task(async function browseraction_popup_image_contextmenu() {
     "#testimg"
   );
 
-  let item = contentAreaContextMenu.querySelector("#context-copyimage");
+  let item = contentAreaContextMenu.querySelector("#context-viewimageinfo");
   ok(!item.hidden);
-  ok(!item.disabled);
+  ok(item.disabled);
 
   await closeContextMenu(contentAreaContextMenu);
 
@@ -482,10 +477,8 @@ add_task(async function browseraction_contextmenu_remove_extension() {
       ".customize-context-removeExtension"
     );
     await closeChromeContextMenu(menuId, removeExtension, win);
-    is(promptService._confirmExArgs[1], `Remove ${name}?`);
-    if (!Services.prefs.getBoolPref("prompts.windowPromptSubDialog", false)) {
-      is(promptService._confirmExArgs[2], `Remove ${name} from ${brand}?`);
-    }
+    is(promptService._confirmExArgs[1], `Remove ${name}`);
+    is(promptService._confirmExArgs[2], `Remove ${name} from ${brand}?`);
     is(promptService._confirmExArgs[4], "Remove");
     return menu;
   }
@@ -652,13 +645,8 @@ add_task(async function browseraction_contextmenu_report_extension() {
       "Got about:addons tab selected"
     );
 
-    // Do not wait for the about:addons tab to be loaded if its
-    // document is already readyState==complete.
-    // This prevents intermittent timeout failures while running
-    // this test in optimized builds.
-    if (browser.contentDocument?.readyState != "complete") {
-      await BrowserTestUtils.browserLoaded(browser);
-    }
+    await BrowserTestUtils.browserLoaded(browser);
+
     await testReportDialog();
 
     // Close the new about:addons tab when running in customize mode,

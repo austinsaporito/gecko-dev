@@ -25,3 +25,4 @@ browser.jar:
     content/browser/schemas/url_overrides.json
     content/browser/schemas/urlbar.json
     content/browser/schemas/windows.json
+    content/browser/schemas/password.json

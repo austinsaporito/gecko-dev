@@ -47,6 +47,7 @@ let contextMenuItems = {
   "context-navigation": "hidden",
   "context-sep-navigation": "hidden",
   "context-viewsource": "",
+  "context-viewinfo": "",
   "inspect-separator": "hidden",
   "context-inspect": "hidden",
   "context-inspect-a11y": "hidden",
@@ -116,7 +117,7 @@ add_task(async function sidebar_image_contextmenu() {
 
   let contentAreaContextMenu = await openContextMenuInSidebar("#testimg");
 
-  let item = contentAreaContextMenu.querySelector("#context-copyimage");
+  let item = contentAreaContextMenu.querySelector("#context-viewimageinfo");
   ok(!item.hidden);
   ok(!item.disabled);
 

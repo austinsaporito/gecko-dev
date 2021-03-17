@@ -22,7 +22,6 @@ add_task(async function test_slow_content_script() {
       ["dom.ipc.processCount", DEFAULT_PROCESS_COUNT * 2],
       ["dom.ipc.processPrelaunch.enabled", false],
       ["dom.ipc.reportProcessHangs", true],
-      ["dom.max_script_run_time.require_critical_input", false],
     ],
   });
 
@@ -63,7 +62,7 @@ add_task(async function test_slow_content_script() {
 
   ok(text.includes("\u201cSlow Script Extension\u201d"), "Label is correct");
 
-  let stopButton = notification.querySelector("[label='Stop']");
+  let stopButton = notification.querySelector("[label='Stop It']");
   stopButton.click();
 
   BrowserTestUtils.removeTab(gBrowser.selectedTab);
