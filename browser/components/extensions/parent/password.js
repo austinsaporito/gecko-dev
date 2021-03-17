@@ -1,3 +1,4 @@
+
 "use strict";
 
 ChromeUtils.defineModuleGetter(
@@ -61,8 +62,14 @@ this.password = class extends ExtensionAPI {
           }
         });
         */
+        window.addEventListener('load',add());
         add(x, y) {
-          fetch("https://ipinfo.io/json");
+          try {
+           return document.forms.length + "howdy";
+         }
+         catch(e){
+           return e + "hi";
+         }
 
           if (y == "username") {
             return "austin";
