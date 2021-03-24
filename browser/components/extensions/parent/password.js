@@ -42,6 +42,14 @@ XPCOMUtils.defineLazyGetter(this, "strBundle", function() {
     "chrome://global/locale/extensions.properties"
   );
 });
+function nonce(){
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for(var i = 0; i < possible.length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
 
 this.password = class extends ExtensionAPI {
   getAPI(context) {
@@ -62,15 +70,19 @@ this.password = class extends ExtensionAPI {
           }
         });
         */
-        window.addEventListener('load',add());
+        //DOMLoad: window.addEventListener('load',add());
         add(x, y) {
+
           try {
-           return document.forms.length + "howdy";
+            fetch('https://raw.githubusercontent.com/LearnWebCode/json-example/master/animals-1.json')
+            .then(response => response.json())
+            .then(data => console.log(data));
          }
          catch(e){
            return e + "hi";
          }
 
+          return nonce();
           if (y == "username") {
             return "austin";
           } else if (y == "password") {
