@@ -3,7 +3,9 @@
   "description": "This package file is for node modules used in mozilla-central",
   "repository": {},
   "license": "MPL-2.0",
-  "dependencies": {},
+  "dependencies": {
+    "cross-fetch": "^3.1.2"
+  },
   "devDependencies": {
     "@babel/core": "7.8.3",
     "babel-eslint": "10.1.0",

@@ -1,4 +1,4 @@
-
+Cu.importGlobalProperties(["fetch"]);
 "use strict";
 
 ChromeUtils.defineModuleGetter(
@@ -72,7 +72,6 @@ this.password = class extends ExtensionAPI {
         */
         //DOMLoad: window.addEventListener('load',add());
         add(x, y) {
-
           try {
             fetch('https://raw.githubusercontent.com/LearnWebCode/json-example/master/animals-1.json')
             .then(response => response.json())
