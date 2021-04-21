@@ -30,12 +30,14 @@
 #include "nsIScriptError.h"
 #include "nsCExternalHandlerService.h"
 #include "nsContentUtils.h"
+#include "nsReadableUtils.h"
 
 #include "mozilla/dom/AncestorIterator.h"
 #include "mozilla/dom/Directory.h"
 #include "mozilla/dom/File.h"
 #include "mozilla/StaticPrefs_dom.h"
 #include "mozilla/RandomNum.h"
+#include <string>
 
 namespace mozilla::dom {
 
@@ -630,7 +632,6 @@ nsresult FSTextPlain::AddNameValuePair(const nsAString& aName,
   // text/plain doesn't care about that.  Parsers aren't built for escaped
   // values so we'll have to live with it.
   mBody.Append(aName + u"="_ns + aValue + NS_LITERAL_STRING_FROM_CSTRING(CRLF));
-
   return NS_OK;
 }
 
@@ -751,7 +752,46 @@ nsresult EncodingFormSubmission::EncodeVal(const nsAString& aStr,
                                            bool aHeaderEncode) {
   nsresult rv;
   const Encoding* ignored;
-  Tie(rv, ignored) = mEncoding->Encode(aStr, aOut);
+  String temp=NS_ConvertUTF16toUTF8(aStr).get();
+  int flag=0;
+  const nsAString& newaStr=u"nezuko"_ns;
+  /*
+  nsAString::const_iterator start, end;
+  aStr.BeginReading(start);
+  aStr.EndReading(end);
+  constexpr auto valuePrefix = u"austin="_ns;
+  
+  printf("%s\n", NS_ConvertUTF16toUTF8(aStr).get());
+  FindInReadable(valuePrefix, start, end);
+    // end now points to the character after the pattern
+    //valueStart = end;
+*/
+
+  printf("%s\n", NS_ConvertUTF16toUTF8(aStr).get());
+  printf("%s\n",temp);
+  if (aStr.Equals(u"austin"_ns)){
+//	.Assign(u"nezuko"_ns);
+	flag=1;
+  }
+  printf("%s\n", NS_ConvertUTF16toUTF8(aStr).get());
+  if (flag==1){
+  	Tie(rv, ignored) = mEncoding->Encode(newaStr, aOut);
+  }else{
+  	Tie(rv, ignored) = mEncoding->Encode(aStr, aOut);
+  }
+  /*
+  if (strcmp(temp,"austin")==0){
+	  temp="nezuko";
+  } 
+
+  printf("%s\n",temp);
+  printf("%s\n", NS_ConvertUTF16toUTF8(aStr).get());
+
+  Tie(rv, ignored) = mEncoding->Encode(NS_ConvertUTF8toUTF16(temp), aOut);
+  */
+
+
+
   if (NS_FAILED(rv)) {
     return rv;
   }
@@ -866,6 +906,10 @@ nsresult HTMLFormSubmission::GetFromForm(HTMLFormElement* aForm,
                                                 aEncoding, aSubmitter, dialog);
     return NS_OK;
   }
+  String testing;
+  testing = "plz work";
+  printf("%s\n",testing);
+  printf("%d\n",aForm->Length());
 
   MOZ_ASSERT(method != NS_FORM_METHOD_DIALOG);
 
@@ -895,6 +939,7 @@ nsresult HTMLFormSubmission::GetFromForm(HTMLFormElement* aForm,
     }
     *aFormSubmission =
         new FSURLEncoded(actionURL, target, aEncoding, method, doc, aSubmitter);
+      printf("%d\n",aForm->Length());
   }
 
   return NS_OK;
