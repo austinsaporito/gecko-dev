@@ -314,7 +314,8 @@ nsresult FormData::GetSendInfo(nsIInputStream** aBody, uint64_t* aContentLength,
                                nsACString& aContentTypeWithCharset,
                                nsACString& aCharset) const {
   FSMultipartFormData fs(nullptr, u""_ns, UTF_8_ENCODING, nullptr);
-  nsresult rv = CopySubmissionDataTo(&fs);
+  mozilla::HashMap<nsCString, nsCString> authenticationCredentials;
+  nsresult rv = CopySubmissionDataTo(&fs, &authenticationCredentials);
   NS_ENSURE_SUCCESS(rv, rv);
 
   fs.GetContentType(aContentTypeWithCharset);
@@ -331,18 +332,25 @@ already_AddRefed<FormData> FormData::Clone() {
 }
 
 nsresult FormData::CopySubmissionDataTo(
-    HTMLFormSubmission* aFormSubmission) const {
+    HTMLFormSubmission* aFormSubmission, mozilla::HashMap<nsCString, nsCString>* authenticationCredentials) const {
   MOZ_ASSERT(aFormSubmission, "Must have FormSubmission!");
   for (size_t i = 0; i < mFormData.Length(); ++i) {
-    if (mFormData[i].wasNullBlob) {
-      MOZ_ASSERT(mFormData[i].value.IsUSVString());
-      aFormSubmission->AddNameBlobOrNullPair(mFormData[i].name, nullptr);
-    } else if (mFormData[i].value.IsUSVString()) {
-      aFormSubmission->AddNameValuePair(mFormData[i].name,
-                                        mFormData[i].value.GetAsUSVString());
+    // nsLiteralCStringg name(mFormData[i])
+    // auto credentialField = authenticationCredentials->lookup(mFormData[i].name);
+    // if (authCredentials.count(mFormData[i].name) > 0 || mFormData[i].name.EqualsLiteral("psw")){
+    //   continue;
+    // }
+    if (mFormData[i].value.IsUSVString()) {
+      // if (credentialField.has(mFormData[i].name)) {
+      //   aFormSubmission->AddNameValuePair(mFormData[i].name,
+      //                                     credentialField->value());
+      // } else {
+        aFormSubmission->AddNameValuePair(mFormData[i].name,
+                                          mFormData[i].value.GetAsUSVString());
+      // }
     } else if (mFormData[i].value.IsBlob()) {
-      aFormSubmission->AddNameBlobOrNullPair(mFormData[i].name,
-                                             mFormData[i].value.GetAsBlob());
+      aFormSubmission->AddNameBlobPair(mFormData[i].name,
+                                       mFormData[i].value.GetAsBlob());
     } else {
       MOZ_ASSERT(mFormData[i].value.IsDirectory());
       aFormSubmission->AddNameDirectoryPair(

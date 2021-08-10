@@ -760,12 +760,11 @@ nsresult EncodingFormSubmission::EncodeVal(const nsAString& aStr,
   aStr.BeginReading(start);
   aStr.EndReading(end);
   constexpr auto valuePrefix = u"austin="_ns;
-  
+
   printf("%s\n", NS_ConvertUTF16toUTF8(aStr).get());
   FindInReadable(valuePrefix, start, end);
     // end now points to the character after the pattern
     //valueStart = end;
-*/
 
   printf("%s\n", NS_ConvertUTF16toUTF8(aStr).get());
   printf("%s\n",temp);
@@ -779,10 +778,9 @@ nsresult EncodingFormSubmission::EncodeVal(const nsAString& aStr,
   }else{
   	Tie(rv, ignored) = mEncoding->Encode(aStr, aOut);
   }
-  /*
   if (strcmp(temp,"austin")==0){
 	  temp="nezuko";
-  } 
+  }
 
   printf("%s\n",temp);
   printf("%s\n", NS_ConvertUTF16toUTF8(aStr).get());
@@ -790,8 +788,7 @@ nsresult EncodingFormSubmission::EncodeVal(const nsAString& aStr,
   Tie(rv, ignored) = mEncoding->Encode(NS_ConvertUTF8toUTF16(temp), aOut);
   */
 
-
-
+  Tie(rv, ignored) = mEncoding->Encode(aStr, aOut);
   if (NS_FAILED(rv)) {
     return rv;
   }

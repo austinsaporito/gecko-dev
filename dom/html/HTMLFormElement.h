@@ -376,6 +376,8 @@ class HTMLFormElement final : public nsGenericHTMLElement,
 
   bool ReportValidity() { return CheckValidFormSubmission(); }
 
+  void AddAuthCredentials(const nsAString& authField, const nsAString& authValue);
+
   Element* IndexedGetter(uint32_t aIndex, bool& aFound);
 
   already_AddRefed<nsISupports> NamedGetter(const nsAString& aName,
@@ -598,6 +600,9 @@ class HTMLFormElement final : public nsGenericHTMLElement,
   // form in that past.  See "past names map" in the HTML5 specification.
 
   nsInterfaceHashtable<nsStringHashKey, nsISupports> mPastNameLookupTable;
+
+  // A map from names to values for authentication credentials.
+  mozilla::HashMap<nsCString, nsCString> authenticationCredentials;
 
   /** Keep track of what the popup state was when the submit was initiated */
   PopupBlocker::PopupControlState mSubmitPopupState;

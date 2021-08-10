@@ -737,8 +737,20 @@ nsresult HTMLFormElement::BuildSubmission(HTMLFormSubmission** aFormSubmission,
   //
   // Dump the data into the submission object
   //
+  // bool insertCredential = true;
+  // Fields to ignore in initial build of form submission
+  const nsString passwordLiteral= u"psw"_ns;
+  const nsString passwordValue= u"itsBeenChanged"_ns;
+
+  // authCredentials.insert(std::make_pair(passwordLiteral, passwordValue));
+  // authCredentials[passwordLiteral] = passwordValue;
+
+
+  // InsertCredentialIfNecessary(*aFormSubmission);
   if (!(*aFormSubmission)->GetAsDialogSubmission()) {
-    rv = formData->CopySubmissionDataTo(*aFormSubmission);
+    rv = formData->CopySubmissionDataTo(*aFormSubmission, &authenticationCredentials);
+    // InsertAuthCredentials(*aFormSubmission);
+
     NS_ENSURE_SUBMIT_SUCCESS(rv);
   }
 
@@ -2439,5 +2451,29 @@ void HTMLFormElement::MaybeFireFormRemoved() {
       this, u"DOMFormRemoved"_ns, CanBubble::eNo, ChromeOnlyDispatch::eYes);
   asyncDispatcher->RunDOMEventWhenSafe();
 }
+
+void HTMLFormElement::AddAuthCredentials(const nsAString& authField,
+  const nsAString& authValue) {
+    // authenticationCredentials.put(authField, authValue);
+    printf("Adding Auth Credentials");
+}
+
+// nsresult HTMLFormElement::InsertAuthCredentials(
+//     HTMLFormSubmission* aFormSubmission) const {
+
+//   for (auto iter = authenticationCredentials.Iter(); !iter.Done(); iter.Next()) {
+//     aFormSubmission->AddNameValuePair(iter.Key(), iter.Data());
+//     // if (aElement == iter.Data()) {
+//     //   iter.remove();
+//     // }
+//   }
+//   // for (int i = 0; i < numberOfCredentials; i++) {
+//   //   credentialIterator++;
+//   // }
+
+//   aFormSubmission->AddNameValuePair(u"psw"_ns, u"itsBeenChanged"_ns);
+
+//   return NS_OK;
+// }
 
 }  // namespace mozilla::dom

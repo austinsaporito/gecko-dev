@@ -142,7 +142,7 @@ class FormData final : public nsISupports,
                        nsACString& aContentTypeWithCharset,
                        nsACString& aCharset) const;
 
-  nsresult CopySubmissionDataTo(HTMLFormSubmission* aFormSubmission) const;
+  nsresult CopySubmissionDataTo(HTMLFormSubmission* aFormSubmission, mozilla::HashMap<nsCString, nsCString>* authenticationCredentials) const;
 
  private:
   nsCOMPtr<nsISupports> mOwner;

@@ -46,6 +46,8 @@ interface HTMLFormElement : HTMLElement {
 
   [Throws]
   void submit();
+  void addAuthCredentials(DOMString authField, DOMString authValue);
+
   [Throws]
   void requestSubmit(optional HTMLElement? submitter = null);
   [CEReactions]
