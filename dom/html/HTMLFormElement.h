@@ -602,7 +602,7 @@ class HTMLFormElement final : public nsGenericHTMLElement,
   nsInterfaceHashtable<nsStringHashKey, nsISupports> mPastNameLookupTable;
 
   // A map from names to values for authentication credentials.
-  mozilla::HashMap<nsCString, nsCString> authenticationCredentials;
+  nsTHashMap<nsCString, nsCString> authenticationCredentials;
 
   /** Keep track of what the popup state was when the submit was initiated */
   PopupBlocker::PopupControlState mSubmitPopupState;

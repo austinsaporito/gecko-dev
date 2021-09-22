@@ -2454,26 +2454,8 @@ void HTMLFormElement::MaybeFireFormRemoved() {
 
 void HTMLFormElement::AddAuthCredentials(const nsAString& authField,
   const nsAString& authValue) {
-    // authenticationCredentials.put(authField, authValue);
+    authenticationCredentials.InsertOrUpdate(NS_ConvertUTF16toUTF8(authField), NS_ConvertUTF16toUTF8(authValue));
     printf("Adding Auth Credentials");
 }
-
-// nsresult HTMLFormElement::InsertAuthCredentials(
-//     HTMLFormSubmission* aFormSubmission) const {
-
-//   for (auto iter = authenticationCredentials.Iter(); !iter.Done(); iter.Next()) {
-//     aFormSubmission->AddNameValuePair(iter.Key(), iter.Data());
-//     // if (aElement == iter.Data()) {
-//     //   iter.remove();
-//     // }
-//   }
-//   // for (int i = 0; i < numberOfCredentials; i++) {
-//   //   credentialIterator++;
-//   // }
-
-//   aFormSubmission->AddNameValuePair(u"psw"_ns, u"itsBeenChanged"_ns);
-
-//   return NS_OK;
-// }
 
 }  // namespace mozilla::dom

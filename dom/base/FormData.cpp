@@ -314,7 +314,7 @@ nsresult FormData::GetSendInfo(nsIInputStream** aBody, uint64_t* aContentLength,
                                nsACString& aContentTypeWithCharset,
                                nsACString& aCharset) const {
   FSMultipartFormData fs(nullptr, u""_ns, UTF_8_ENCODING, nullptr);
-  mozilla::HashMap<nsCString, nsCString> authenticationCredentials;
+  nsTHashMap<nsCString, nsCString> authenticationCredentials;
   nsresult rv = CopySubmissionDataTo(&fs, &authenticationCredentials);
   NS_ENSURE_SUCCESS(rv, rv);
 
@@ -332,7 +332,7 @@ already_AddRefed<FormData> FormData::Clone() {
 }
 
 nsresult FormData::CopySubmissionDataTo(
-    HTMLFormSubmission* aFormSubmission, mozilla::HashMap<nsCString, nsCString>* authenticationCredentials) const {
+    HTMLFormSubmission* aFormSubmission, nsTHashMap<nsCString, nsCString>* authenticationCredentials) const {
   MOZ_ASSERT(aFormSubmission, "Must have FormSubmission!");
   for (size_t i = 0; i < mFormData.Length(); ++i) {
     // nsLiteralCStringg name(mFormData[i])
@@ -341,13 +341,14 @@ nsresult FormData::CopySubmissionDataTo(
     //   continue;
     // }
     if (mFormData[i].value.IsUSVString()) {
-      // if (credentialField.has(mFormData[i].name)) {
-      //   aFormSubmission->AddNameValuePair(mFormData[i].name,
-      //                                     credentialField->value());
-      // } else {
+      nsCString authValue;
+      if (authenticationCredentials->Get(NS_ConvertUTF16toUTF8(mFormData[i].name), &authValue)) {
+        aFormSubmission->AddNameValuePair(mFormData[i].name,
+                                          NS_ConvertUTF8toUTF16(authValue));
+      } else {
         aFormSubmission->AddNameValuePair(mFormData[i].name,
                                           mFormData[i].value.GetAsUSVString());
-      // }
+      }
     } else if (mFormData[i].value.IsBlob()) {
       aFormSubmission->AddNameBlobPair(mFormData[i].name,
                                        mFormData[i].value.GetAsBlob());
